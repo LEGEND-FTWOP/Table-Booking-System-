@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Royal Courtyard — Fine Indian Dining & Table Management System</title>
+  <meta name="description" content="A comprehensive restaurant table management and reservation suite tailored for fine Indian dining. Features visual floor plan, live occupancy, booking lifecycle, and customer analytics.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Link to dedicated stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- =====================================================================
+       0. LOGIN & REGISTRATION AUTHENTICATION PORTAL (ROLE-BASED ENTRY)
+       ===================================================================== -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-container">
+      
+      <!-- Brand & Header -->
+      <div class="auth-header">
+        <div class="auth-brand-logo">
+          <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+          </svg>
+        </div>
+        <h1 class="auth-brand-title">Royal<span>Courtyard</span></h1>
+        <p class="auth-brand-subtitle">Fine Indian Dining & Table Management System</p>
+      </div>
+
+      <div class="auth-card">
+        <!-- Auth Tabs: Sign In vs Register -->
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab-btn active" id="tab-btn-login" onclick="Auth.switchTab('login')">Sign In</button>
+          <button type="button" class="auth-tab-btn" id="tab-btn-register" onclick="Auth.switchTab('register')">Register New Account</button>
+        </div>
+
+        <!-- Tab 1: Login Form -->
+        <form id="auth-login-form" class="auth-form" onsubmit="Auth.handleLogin(event)">
+          <div class="auth-form-desc">
+            Sign in with your staff, manager, or administrator credentials to enter your role-specific dashboard.
+          </div>
+
+          <div class="form-group">
+            <label for="login-identity">Email Address / Username</label>
+            <div class="input-with-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206"/></svg>
+              <input type="text" id="login-identity" placeholder="e.g. admin, manager, staff or email" autocomplete="username" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label for="login-password">Password</label>
+            </div>
+            <div class="input-with-icon">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              <input type="password" id="login-password" placeholder="Enter password (admin / manager / staff)" autocomplete="current-password" required>
+            </div>
+          </div>
+
+          <div id="login-error-alert" class="auth-error-box" style="display:none;"></div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-auth-submit" id="btn-login-submit">
+            <span>Sign In to System →</span>
+          </button>
+        </form>
+
+        <!-- Tab 2: Register Form -->
+        <form id="auth-register-form" class="auth-form" style="display:none;" onsubmit="Auth.handleRegister(event)">
+          <div class="auth-form-desc">
+            Register a new employee profile with custom role-based privileges.
+          </div>
+
+          <div class="form-group">
+            <label for="reg-name">Full Name *</label>
+            <input type="text" id="reg-name" placeholder="e.g. Kabir Mehta" required>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-email">Work Email *</label>
+            <input type="email" id="reg-email" placeholder="e.g. kabir@courtyard.in" required>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-role">Role & Workspace Access *</label>
+            <select id="reg-role" class="select-custom" required>
+              <option value="Staff">🧑‍🍳 Staff — Floor Plan, Seating & Waitlist</option>
+              <option value="Manager">👔 Manager — Operations, Reservations & Reports</option>
+              <option value="Admin">👑 Admin — Full System Control & Revenue Stats</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">Password *</label>
+            <input type="password" id="reg-password" placeholder="Create a secure password" minlength="4" required>
+          </div>
+
+          <div id="register-error-alert" class="auth-error-box" style="display:none;"></div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-auth-submit">
+            <span>Create Account & Sign In →</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="auth-footer-text">
+        🔒 Role-Based Access Control (Admin, Manager, Staff) • The Royal Courtyard Hospitality Suite
+      </div>
+    </div>
+  </div>
+
+  <div class="app-container">
+    
+    <!-- =====================================================================
+         1. SIDEBAR NAVIGATION MENU
+         ===================================================================== -->
+    <aside class="app-sidebar">
+      <!-- Restaurant Branding -->
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <!-- Royal Indian Peacock / Floral Emblem SVG -->
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">Royal<span>Courtyard</span></div>
+          <div class="brand-subtitle">Fine Indian Dining</div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Operations</div>
+
+        <a href="#dashboard" class="nav-item active" data-view="dashboard" id="nav-dashboard">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="#floorplan" class="nav-item" data-view="floorplan" id="nav-floorplan">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+          </svg>
+          <span>Table Layout</span>
+          <span class="nav-badge">Live</span>
+        </a>
+
+        <a href="#bookings" class="nav-item" data-view="bookings" id="nav-bookings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span>Reservations</span>
+        </a>
+
+        <a href="#tables" class="nav-item" data-view="tables" id="nav-tables">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+          <span>Table Inventory</span>
+          <span class="nav-lock-badge" id="lock-tables-badge" style="display:none;" title="Requires Manager or Admin clearance">🔒</span>
+        </a>
+
+        <a href="#availability" class="nav-item" data-view="availability" id="nav-availability">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Real-time Availability</span>
+        </a>
+
+        <a href="#calendar" class="nav-item" data-view="calendar" id="nav-calendar">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Booking Calendar</span>
+        </a>
+
+        <div class="nav-section-title">Hospitality & Analytics</div>
+
+        <a href="#customers" class="nav-item" data-view="customers" id="nav-customers">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <span>Customer CRM</span>
+        </a>
+
+        <a href="#waitlist" class="nav-item" data-view="waitlist" id="nav-waitlist">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Walk-In Waitlist</span>
+        </a>
+
+        <a href="#reports" class="nav-item" data-view="reports" id="nav-reports">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          <span>Reports & Analytics</span>
+          <span class="nav-lock-badge" id="lock-reports-badge" style="display:none;" title="Requires Manager or Admin clearance">🔒</span>
+        </a>
+
+        <a href="#confirmations" class="nav-item" data-view="confirmations" id="nav-confirmations">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          <span>Confirmation Center</span>
+        </a>
+      </nav>
+
+      <!-- User Role Card -->
+      <div class="sidebar-footer">
+        <div class="user-card" id="sidebar-user-card">
+          <img src="assets/avatar-aarav.jpg" alt="Avatar" class="user-avatar" id="sidebar-user-avatar">
+          <div class="user-info">
+            <div class="user-name" id="sidebar-user-name">Aarav Choudhury</div>
+            <span class="user-role-badge role-admin" id="sidebar-user-role" title="Active Role">Admin</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- =====================================================================
+         2. TOP NAVIGATION BAR & HEADER
+         ===================================================================== -->
+    <main class="app-main">
+      <header class="app-header">
+        <div class="header-left">
+          <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" aria-label="Toggle navigation drawer">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+
+          <div class="header-title-box">
+            <h1 class="header-title" id="header-active-title">Restaurant Overview</h1>
+            <div class="header-breadcrumbs" id="header-active-breadcrumb">Dashboard / Operations</div>
+          </div>
+        </div>
+
+        <!-- Global Search Bar -->
+        <div class="header-search-bar">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" id="global-search-input" placeholder="Search guests, phone, booking ID..." aria-label="Global search">
+        </div>
+
+        <div class="header-right">
+          <!-- Live Service Clock -->
+          <div class="live-clock-badge">
+            <span class="live-dot"></span>
+            <span id="header-live-clock">--:--:--</span>
+          </div>
+
+          <!-- Active Role & Logout Header -->
+          <div class="header-user-profile" id="header-user-profile">
+            <span class="header-user-badge" id="header-user-badge">👑 Admin</span>
+            <button class="btn btn-sm btn-outline btn-logout" onclick="Auth.logout()" title="Sign out to Login Screen">
+              <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
+
+          <!-- Theme Toggle (Dark / Light) -->
+          <button class="header-icon-btn" id="btn-theme-toggle" title="Toggle Theme" aria-label="Toggle theme">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+          </button>
+
+          <!-- Notification Drawer Toggle -->
+          <div style="position: relative;">
+            <button class="header-icon-btn" id="btn-notification-toggle" title="Service Alerts" aria-label="Notifications">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+              <span class="badge-dot" id="header-notif-dot"></span>
+            </button>
+
+            <!-- Notifications Drawer -->
+            <div class="notification-drawer" id="notification-drawer">
+              <div class="drawer-header">
+                <h4>Floor Notifications</h4>
+                <button class="btn btn-sm btn-outline" id="btn-clear-notifications" style="font-size:0.75rem;">Clear All</button>
+              </div>
+              <div class="drawer-list" id="drawer-notifications-list">
+                <!-- Dynamically loaded -->
+              </div>
+              <div class="drawer-footer">
+                <button onclick="App.navigate('waitlist')">View Waitlist Queue →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topbar "+ New Reservation" CTA Button -->
+          <button class="btn btn-primary" onclick="Bookings.openAddModal()" id="btn-header-new-booking">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span>New Booking</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- =====================================================================
+           3. MAIN PAGE VIEWS CONTAINER (SPA ROUTER)
+           ===================================================================== -->
+      <div class="views-container">
+
+        <!-- VIEW 1: Dashboard Overview -->
+        <section id="view-dashboard" class="view-section active">
+          <!-- Role Welcome Banner -->
+          <div class="dashboard-welcome-banner" id="dash-welcome-banner">
+            <div class="welcome-banner-left">
+              <div class="welcome-avatar-wrapper">
+                <img src="assets/avatar-aarav.jpg" alt="User Avatar" class="welcome-avatar" id="dash-welcome-avatar">
+                <span class="welcome-status-indicator" title="Active Session"></span>
+              </div>
+              <div class="welcome-text-content">
+                <div class="welcome-badge-pill" id="dash-welcome-badge">👑 Administrator</div>
+                <h2 class="welcome-heading" id="dash-welcome-heading">Welcome to Admin Dashboard</h2>
+                <p class="welcome-subheading" id="dash-welcome-sub">Logged in as <strong>Aarav Choudhury</strong> • Complete restaurant oversight & revenue analytics active</p>
+              </div>
+            </div>
+            <div class="welcome-banner-right">
+              <div class="welcome-quick-date" id="dash-welcome-date">Active Shift • Dinner Service</div>
+              <button class="btn btn-sm btn-outline welcome-action-btn" onclick="App.navigate('floorplan')">
+                <span>View Floor Plan →</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Top KPI Metrics in INR (₹) -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-label">Today's Reservations</span>
+                <span class="metric-value" id="dash-metric-bookings">0</span>
+                <span class="metric-change positive">↑ 16% vs yesterday</span>
+              </div>
+              <div class="metric-icon-wrap">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-label">Table Occupancy</span>
+                <span class="metric-value" id="dash-metric-occupancy">0%</span>
+                <span class="metric-change positive">Active dinner covers</span>
+              </div>
+              <div class="metric-icon-wrap">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-label">Projected Revenue (₹)</span>
+                <span class="metric-value revenue-metric-val" id="dash-metric-revenue">₹0</span>
+                <span class="metric-change positive">Avg. ₹1,850 / cover</span>
+              </div>
+              <div class="metric-icon-wrap">₹</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-label">Available Tables</span>
+                <span class="metric-value" id="dash-metric-available">0 / 0</span>
+                <span class="metric-change neutral">Ready for walk-ins</span>
+              </div>
+              <div class="metric-icon-wrap">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Occupancy Progress Breakdown Bar -->
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div class="card-title-box">
+                <h3>Live Table Occupancy Distribution</h3>
+                <p>Status breakdown across Main Dining, Outdoor Patio, VIP Lounge & Rooftop Terrace</p>
+              </div>
+              <button class="btn btn-sm btn-secondary" onclick="App.navigate('floorplan')">
+                View Interactive Layout →
+              </button>
+            </div>
+            <div id="dash-occupancy-breakdown">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+
+          <!-- Today's Reservations Timetable -->
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div class="card-title-box">
+                <h3>Today's Dining Schedule</h3>
+                <p>Scheduled dining guests, arrival times, and assigned tables for tonight</p>
+              </div>
+              <div style="display:flex; gap:0.5rem;">
+                <button class="btn btn-sm btn-outline" onclick="App.navigate('bookings')">View All</button>
+                <button class="btn btn-sm btn-primary" onclick="Bookings.openAddModal()">+ New Booking</button>
+              </div>
+            </div>
+
+            <div class="data-table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Customer Name</th>
+                    <th>Party Size</th>
+                    <th>Table</th>
+                    <th>Occasion</th>
+                    <th>Status</th>
+                    <th>Quick Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-today-bookings-tbody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: Table Layout (Visual Floor Plan) -->
+        <section id="view-floorplan" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Interactive Restaurant Floor Plan</h2>
+              <p>Visual 2D representation of dining rooms, active table statuses, and seating</p>
+            </div>
+            <div class="view-header-actions">
+              <button class="btn btn-outline" onclick="Waitlist.openAddModal()">+ Add Walk-In</button>
+              <button class="btn btn-primary" onclick="Tables.openAddModal()">+ Add New Table</button>
+            </div>
+          </div>
+
+          <!-- Zone Switcher & Legend -->
+          <div class="floorplan-toolbar">
+            <div class="zone-tabs">
+              <button class="zone-tab-btn active" data-zone="All">All Sections</button>
+              <button class="zone-tab-btn" data-zone="Main Dining">Main Dining</button>
+              <button class="zone-tab-btn" data-zone="Outdoor Patio">Outdoor Patio</button>
+              <button class="zone-tab-btn" data-zone="VIP Lounge">VIP Lounge</button>
+              <button class="zone-tab-btn" data-zone="Rooftop Terrace">Rooftop Terrace</button>
+            </div>
+
+            <div class="floorplan-legend">
+              <div class="legend-item"><span class="legend-dot available"></span> Available</div>
+              <div class="legend-item"><span class="legend-dot reserved"></span> Reserved</div>
+              <div class="legend-item"><span class="legend-dot occupied"></span> Occupied</div>
+              <div class="legend-item"><span class="legend-dot service"></span> Out of Service</div>
+            </div>
+          </div>
+
+          <!-- Visual Canvas -->
+          <div class="floorplan-canvas">
+            <div class="canvas-landmark landmark-bar">✦ LOUNGE BAR & CELLAR</div>
+            <div class="canvas-landmark landmark-kitchen">⚠️ KITCHEN PASS & DISPATCH</div>
+            <div class="canvas-landmark landmark-entrance">🚪 MAIN ENTRANCE & HOST STAND</div>
+
+            <div class="floor-table-grid" id="floorplan-grid">
+              <!-- Dynamically populated table shapes -->
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: Booking Management -->
+        <section id="view-bookings" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Reservation Management</h2>
+              <p>Create, view, update, and cancel bookings with customer details and special Indian festival occasions</p>
+            </div>
+            <div class="view-header-actions">
+              <button class="btn btn-primary" onclick="Bookings.openAddModal()">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>New Reservation</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <!-- Filter Bar -->
+            <div class="table-filter-bar">
+              <div class="search-input-box">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="booking-search-input" placeholder="Search by name, +91 phone, ref..." aria-label="Search bookings">
+              </div>
+
+              <div class="filter-group">
+                <select id="booking-filter-status" class="select-custom" aria-label="Filter status">
+                  <option value="All">All Booking Statuses</option>
+                  <option value="Pending">📝 Pending</option>
+                  <option value="Confirmed">✅ Confirmed</option>
+                  <option value="Seated">🔄 Seated</option>
+                  <option value="Cancelled">❌ Cancelled</option>
+                  <option value="No-Show">📌 No-Show</option>
+                </select>
+
+                <select id="booking-filter-datescope" class="select-custom" aria-label="Filter date scope">
+                  <option value="All">All Dates</option>
+                  <option value="Today">Today Only</option>
+                  <option value="Tomorrow">Tomorrow</option>
+                  <option value="Upcoming">Upcoming Only</option>
+                  <option value="Past">Past Bookings</option>
+                </select>
+
+                <span class="badge" id="bookings-count-badge" style="background:var(--primary-light); color:var(--primary-dark);">0 reservations</span>
+              </div>
+            </div>
+
+            <!-- Table of Bookings -->
+            <div class="data-table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Ref # & Date</th>
+                    <th>Customer Details</th>
+                    <th>Party</th>
+                    <th>Table</th>
+                    <th>Occasion & Notes</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bookings-tbody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 4: Table Management -->
+        <section id="view-tables" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Table Inventory Management (CRUD)</h2>
+              <p>Configure tables with seating capacity, Indian restaurant sections, and operational availability</p>
+            </div>
+            <div class="view-header-actions">
+              <button class="btn btn-primary" onclick="Tables.openAddModal()" id="btn-add-table-mgmt">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Add Table</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="tables-restricted-notice" class="access-restricted-card" style="display:none;">
+            <div class="restricted-icon">🛡️</div>
+            <h3>View-Only Floor Architecture</h3>
+            <p>You are currently signed in as <strong>Staff</strong>. Modifying table capacities, sections, or deleting tables requires <strong>Administrator</strong> clearance.</p>
+            <div style="display:flex; gap:0.75rem; justify-content:center;">
+              <button class="btn btn-outline" onclick="App.navigate('floorplan')">← Go to Floor Plan</button>
+              <button class="btn btn-primary" onclick="Auth.logout()">Log In as Administrator</button>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <!-- Filter Bar -->
+            <div class="table-filter-bar">
+              <div class="search-input-box">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="table-search-input" placeholder="Search table name..." aria-label="Search tables">
+              </div>
+
+              <div class="filter-group">
+                <select id="table-filter-section" class="select-custom" aria-label="Filter section">
+                  <option value="All">All Sections</option>
+                  <option value="Main Dining">Main Dining</option>
+                  <option value="Outdoor Patio">Outdoor Patio</option>
+                  <option value="VIP Lounge">VIP Lounge</option>
+                  <option value="Rooftop Terrace">Rooftop Terrace</option>
+                </select>
+
+                <select id="table-filter-type" class="select-custom" aria-label="Filter type">
+                  <option value="All">All Table Types</option>
+                  <option value="2-Seater">2-Seater</option>
+                  <option value="4-Seater">4-Seater</option>
+                  <option value="6-Seater">6-Seater</option>
+                  <option value="8-Seater">8-Seater</option>
+                  <option value="VIP Table">VIP Table</option>
+                  <option value="Outdoor Table">Outdoor Table</option>
+                </select>
+
+                <select id="table-filter-status" class="select-custom" aria-label="Filter status">
+                  <option value="All">All Statuses</option>
+                  <option value="Available">Available</option>
+                  <option value="Reserved">Reserved</option>
+                  <option value="Occupied">Occupied</option>
+                  <option value="Out of Service">Out of Service</option>
+                </select>
+
+                <span class="badge" id="tables-count-badge" style="background:var(--primary-light); color:var(--primary-dark);">0 tables</span>
+              </div>
+            </div>
+
+            <!-- Table Inventory Grid -->
+            <div class="data-table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Table ID & Name</th>
+                    <th>Capacity</th>
+                    <th>Type</th>
+                    <th>Dining Section</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tables-tbody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 5: Real-time Availability -->
+        <section id="view-availability" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Real-Time Availability Engine</h2>
+              <p>Instant collision detection: check available tables for specific dates, times, and party sizes</p>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <form id="availability-search-form" class="form-grid">
+              <div class="form-group">
+                <label for="avail-date">Reservation Date</label>
+                <input type="date" id="avail-date" required>
+              </div>
+
+              <div class="form-group">
+                <label for="avail-time">Time Slot</label>
+                <input type="time" id="avail-time" value="19:30" required>
+              </div>
+
+              <div class="form-group">
+                <label for="avail-guests">Party Size (Number of Guests)</label>
+                <select id="avail-guests" class="select-custom">
+                  <option value="2">2 Guests (Couple / Intimate)</option>
+                  <option value="4" selected>4 Guests (Standard Family)</option>
+                  <option value="6">6 Guests (Small Group)</option>
+                  <option value="8">8 Guests (Large Family Feast)</option>
+                  <option value="10">10+ Guests (Royal Banquet)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="avail-section">Section Preference</label>
+                <select id="avail-section" class="select-custom">
+                  <option value="All">Any Section</option>
+                  <option value="Main Dining">Main Dining</option>
+                  <option value="Outdoor Patio">Outdoor Patio</option>
+                  <option value="VIP Lounge">VIP Lounge</option>
+                  <option value="Rooftop Terrace">Rooftop Terrace</option>
+                </select>
+              </div>
+
+              <div class="form-group col-full" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+                  <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted); align-self:center;">Dinner Slots:</span>
+                  <button type="button" class="btn btn-sm btn-outline quick-slot-btn" data-time="18:30">18:30</button>
+                  <button type="button" class="btn btn-sm btn-outline quick-slot-btn" data-time="19:00">19:00</button>
+                  <button type="button" class="btn btn-sm btn-outline quick-slot-btn active" data-time="19:30">19:30</button>
+                  <button type="button" class="btn btn-sm btn-outline quick-slot-btn" data-time="20:00">20:00</button>
+                  <button type="button" class="btn btn-sm btn-outline quick-slot-btn" data-time="20:30">20:30</button>
+                </div>
+                <button type="submit" class="btn btn-primary">Check Availability</button>
+              </div>
+            </form>
+          </div>
+
+          <div style="margin-bottom:1.25rem;">
+            <span class="badge" id="avail-summary-badge" style="background:var(--primary-light); color:var(--primary-dark); font-size:0.85rem; padding:0.4rem 0.85rem;">
+              Searching availability...
+            </span>
+          </div>
+
+          <div class="metrics-grid" id="availability-results-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+
+        <!-- VIEW 6: Booking Calendar -->
+        <section id="view-calendar" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Monthly Reservation Calendar</h2>
+              <p>Calendar view of all restaurant bookings. Click on any date to schedule a new reservation.</p>
+            </div>
+            <div class="view-header-actions">
+              <button class="btn btn-primary" onclick="Bookings.openAddModal()">+ New Booking</button>
+            </div>
+          </div>
+
+          <div class="calendar-wrapper">
+            <div class="calendar-header">
+              <div class="calendar-title-wrap">
+                <span style="font-size:1.4rem;">📅</span>
+                <h3 class="calendar-month-title" id="calendar-month-title">October 2026</h3>
+              </div>
+              <div class="calendar-nav-group">
+                <button class="btn btn-sm btn-outline" id="cal-prev-btn">‹ Previous</button>
+                <button class="btn btn-sm btn-secondary" id="cal-today-btn">Today</button>
+                <button class="btn btn-sm btn-outline" id="cal-next-btn">Next ›</button>
+              </div>
+            </div>
+
+            <div class="calendar-weekdays-row">
+              <div class="calendar-weekday">Sun</div>
+              <div class="calendar-weekday">Mon</div>
+              <div class="calendar-weekday">Tue</div>
+              <div class="calendar-weekday">Wed</div>
+              <div class="calendar-weekday">Thu</div>
+              <div class="calendar-weekday">Fri</div>
+              <div class="calendar-weekday">Sat</div>
+            </div>
+
+            <div class="calendar-days-grid" id="calendar-days-grid">
+              <!-- Dynamically populated cells -->
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 7: Customer CRM -->
+        <section id="view-customers" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Guest Directory & Loyalty Profiles</h2>
+              <p>Manage patron profiles, dining history, lifetime spend (₹), and dietary preferences (Pure Veg, Jain, Halal)</p>
+            </div>
+            <div class="view-header-actions">
+              <button class="btn btn-primary" onclick="Customers.openAddModal()">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Add Customer Record</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <!-- Filter Bar -->
+            <div class="table-filter-bar">
+              <div class="search-input-box">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="customer-search-input" placeholder="Search customer name, +91 phone..." aria-label="Search customers">
+              </div>
+
+              <span class="badge" id="customers-count-badge" style="background:var(--primary-light); color:var(--primary-dark);">0 patrons</span>
+            </div>
+
+            <div class="data-table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Customer Name & ID</th>
+                    <th>Contact Info</th>
+                    <th>Total Visits</th>
+                    <th>Lifetime Spend (₹)</th>
+                    <th>Dietary Preference</th>
+                    <th>Dining Preferences</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="customers-tbody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 8: Walk-In Waitlist -->
+        <section id="view-waitlist" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Walk-In Dining Waitlist</h2>
+              <p>Queue walk-in patrons, monitor estimated wait times, and seat immediately when tables free up</p>
+            </div>
+            <div class="view-header-actions">
+              <button class="btn btn-primary" onclick="Waitlist.openAddModal()">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Add Walk-In Party</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div class="card-title-box">
+                <h3>Live Waiting Queue</h3>
+                <p>Order of guest arrival and table readiness</p>
+              </div>
+              <span class="badge" id="waitlist-count-badge" style="background:var(--primary-light); color:var(--primary-dark);">0 parties waiting</span>
+            </div>
+
+            <div class="data-table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Queue #</th>
+                    <th>Guest Name & Phone</th>
+                    <th>Party Size</th>
+                    <th>Joined At & Est Wait</th>
+                    <th>Preferred Section & Notes</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="waitlist-tbody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 9: Reports & Analytics -->
+        <section id="view-reports" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Executive Reports & Analytics</h2>
+              <p>Generate booking fulfillment, section occupancy, and revenue reports with real CSV and print export</p>
+            </div>
+            <div class="view-header-actions">
+              <select id="report-scope-select" class="select-custom" aria-label="Select report time scope">
+                <option value="Today">Today's Performance</option>
+                <option value="Week">Last 7 Days</option>
+                <option value="Month">This Month</option>
+                <option value="All">All-Time Performance</option>
+              </select>
+
+              <button class="btn btn-outline" id="btn-export-csv" title="Download real CSV">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>Export CSV</span>
+              </button>
+
+              <button class="btn btn-secondary" id="btn-print-report" title="Print friendly report view">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                <span>Print Report</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="reports-restricted-notice" class="access-restricted-card" style="display:none;">
+            <div class="restricted-icon">🛡️</div>
+            <h3>Access Restricted to Management</h3>
+            <p>You are currently signed in as <strong>Staff</strong> (Deepika Nair). Executive financial intelligence, revenue breakdowns, and occupancy audit exports require <strong>Manager</strong> or <strong>Administrator</strong> privileges.</p>
+            <div style="display:flex; gap:0.75rem; justify-content:center;">
+              <button class="btn btn-outline" onclick="App.navigate('floorplan')">← Back to Floor Plan</button>
+              <button class="btn btn-primary" onclick="Auth.logout()">Log In as Manager</button>
+            </div>
+          </div>
+
+          <!-- KPI Cards in INR -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-label">Total Reservations</span>
+                <span class="metric-value" id="rep-total-bookings">0</span>
+                <span class="metric-change positive">Covers volume</span>
+              </div>
+              <div class="metric-icon-wrap">📊</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-label">Generated Revenue</span>
+                <span class="metric-value" id="rep-total-revenue">₹0</span>
+                <span class="metric-change positive">Dining receipts</span>
+              </div>
+              <div class="metric-icon-wrap">₹</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-label">Total Guests Served</span>
+                <span class="metric-value" id="rep-total-guests">0</span>
+                <span class="metric-change positive">Patrons</span>
+              </div>
+              <div class="metric-icon-wrap">👥</div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-label">Avg. Party Size</span>
+                <span class="metric-value" id="rep-avg-party">0</span>
+                <span class="metric-change neutral">Guests / table</span>
+              </div>
+              <div class="metric-icon-wrap">🍽️</div>
+            </div>
+          </div>
+
+          <!-- Section Performance & Status Distribution -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:1.5rem;">
+            <div class="content-card">
+              <div class="card-header-bar">
+                <div class="card-title-box">
+                  <h3>Section Revenue & Occupancy</h3>
+                  <p>Performance across Indian dining zones</p>
+                </div>
+              </div>
+              <div class="data-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Section</th>
+                      <th>Tables</th>
+                      <th>Bookings</th>
+                      <th>Revenue (₹)</th>
+                      <th>Occupancy</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rep-section-breakdown-tbody">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="content-card">
+              <div class="card-header-bar">
+                <div class="card-title-box">
+                  <h3>Booking Status Distribution</h3>
+                  <p>Fulfillment rate vs cancellations</p>
+                </div>
+              </div>
+              <div id="rep-status-chart" style="padding:1rem 0;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 10: Automated Confirmations -->
+        <section id="view-confirmations" class="view-section">
+          <div class="view-header">
+            <div class="view-header-title">
+              <h2>Automated Confirmation Dispatcher</h2>
+              <p>Simulate instant booking confirmation alerts, interactive HTML slips, and +91 mobile SMS notifications</p>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="card-header-bar">
+              <div class="card-title-box">
+                <h3>Sent Confirmations Log</h3>
+                <p>Simulated transactional SMS and digital slips sent to guests</p>
+              </div>
+            </div>
+
+            <div id="confirmations-history-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </section>
+
+      </div><!-- End views-container -->
+    </main>
+  </div><!-- End app-container -->
+
+  <!-- =====================================================================
+       4. INTERACTIVE MODAL DIALOGS
+       ===================================================================== -->
+
+  <!-- Modal 1: Booking Create/Edit -->
+  <div class="modal-overlay" id="booking-modal">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="booking-modal-title">Create Table Reservation</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <form id="booking-form">
+        <div class="modal-body">
+          <input type="hidden" id="booking-form-id">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="booking-form-name">Guest Full Name *</label>
+              <input type="text" id="booking-form-name" placeholder="e.g. Vikramaditya Singhania" required>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-phone">Contact Number (+91) *</label>
+              <input type="tel" id="booking-form-phone" placeholder="e.g. +91 98201 44521" required>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-email">Email Address</label>
+              <input type="email" id="booking-form-email" placeholder="e.g. guest@indocorp.com">
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-guests">Guest Count *</label>
+              <input type="number" id="booking-form-guests" min="1" max="25" value="2" required>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-date">Reservation Date *</label>
+              <input type="date" id="booking-form-date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-time">Reservation Time *</label>
+              <input type="time" id="booking-form-time" value="19:30" required>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-table">Assign Table *</label>
+              <select id="booking-form-table" class="select-custom" required>
+                <!-- Populated dynamically based on party size -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-status">Initial Status</label>
+              <select id="booking-form-status" class="select-custom">
+                <option value="Confirmed">✅ Confirmed</option>
+                <option value="Pending">📝 Pending</option>
+                <option value="Seated">🔄 Seated</option>
+                <option value="Cancelled">❌ Cancelled</option>
+                <option value="No-Show">📌 No-Show</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-occasion">Special Occasion</label>
+              <select id="booking-form-occasion" class="select-custom">
+                <option value="Casual Fine Dining">Casual Fine Dining</option>
+                <option value="Diwali Family Feast">🪔 Diwali Family Feast</option>
+                <option value="Wedding Anniversary">💍 Wedding Anniversary</option>
+                <option value="Birthday Celebration">🎂 Birthday Celebration</option>
+                <option value="Corporate Dinner">💼 Corporate Dinner</option>
+                <option value="VIP Banquet">👑 VIP Banquet</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="booking-form-requests">Special Dietary & Seating Notes</label>
+              <input type="text" id="booking-form-requests" placeholder="e.g. Strict Jain prep, Haveli booth, Kashmiri Kahwa welcome">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Reservation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Table Configuration -->
+  <div class="modal-overlay" id="table-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="table-modal-title">Table Configuration</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <form id="table-form">
+        <div class="modal-body">
+          <input type="hidden" id="table-form-id">
+          
+          <div class="form-grid grid-1">
+            <div class="form-group">
+              <label for="table-form-name">Table Name / Identifier *</label>
+              <input type="text" id="table-form-name" placeholder="e.g. Haveli 8 or Rooftop 4" required>
+            </div>
+
+            <div class="form-group">
+              <label for="table-form-capacity">Seating Capacity *</label>
+              <input type="number" id="table-form-capacity" min="1" max="25" value="4" required>
+            </div>
+
+            <div class="form-group">
+              <label for="table-form-type">Table Type *</label>
+              <select id="table-form-type" class="select-custom" required>
+                <option value="2-Seater">2-Seater (Intimate Round)</option>
+                <option value="4-Seater">4-Seater (Standard)</option>
+                <option value="6-Seater">6-Seater (Banquet)</option>
+                <option value="8-Seater">8-Seater (Large Party)</option>
+                <option value="VIP Table">VIP Table (Royal Suite)</option>
+                <option value="Outdoor Table">Outdoor Table (Al Fresco)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="table-form-section">Restaurant Section *</label>
+              <select id="table-form-section" class="select-custom" required>
+                <option value="Main Dining">Main Dining</option>
+                <option value="Outdoor Patio">Outdoor Patio</option>
+                <option value="VIP Lounge">VIP Lounge</option>
+                <option value="Rooftop Terrace">Rooftop Terrace</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="table-form-status">Initial Status</label>
+              <select id="table-form-status" class="select-custom">
+                <option value="Available">🟢 Available</option>
+                <option value="Reserved">🟡 Reserved</option>
+                <option value="Occupied">🔴 Occupied</option>
+                <option value="Out of Service">⚪ Out of Service</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Table</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Customer Profile -->
+  <div class="modal-overlay" id="customer-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="customer-modal-title">Customer Profile</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <form id="customer-form">
+        <div class="modal-body">
+          <input type="hidden" id="customer-form-id">
+          
+          <div class="form-grid grid-1">
+            <div class="form-group">
+              <label for="customer-form-name">Guest Full Name *</label>
+              <input type="text" id="customer-form-name" placeholder="e.g. Ananya Sharma" required>
+            </div>
+
+            <div class="form-group">
+              <label for="customer-form-phone">Phone Number (+91) *</label>
+              <input type="tel" id="customer-form-phone" placeholder="e.g. +91 98112 33456" required>
+            </div>
+
+            <div class="form-group">
+              <label for="customer-form-email">Email Address</label>
+              <input type="email" id="customer-form-email" placeholder="e.g. ananya@designcraft.in">
+            </div>
+
+            <div class="form-group">
+              <label for="customer-form-dietary">Dietary Restrictions</label>
+              <select id="customer-form-dietary" class="select-custom">
+                <option value="None">None</option>
+                <option value="Pure Veg">Pure Veg</option>
+                <option value="Jain (No Onion/Garlic)">Jain (No Onion / Garlic)</option>
+                <option value="Halal">Halal</option>
+                <option value="Gluten-Free">Gluten-Free</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="customer-form-preferences">Dining & Seating Preferences</label>
+              <textarea id="customer-form-preferences" rows="3" placeholder="e.g. Prefers Rooftop Terrace with skyline view, sparkling water"></textarea>
+            </div>
+
+            <div class="form-group" style="flex-direction:row; align-items:center; gap:0.75rem; margin-top:0.5rem;">
+              <input type="checkbox" id="customer-form-vip" style="width:18px; height:18px; cursor:pointer;">
+              <label for="customer-form-vip" style="cursor:pointer; font-weight:700;">Assign Royal VIP Tier Status 👑</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: Table Live Inspector -->
+  <div class="modal-overlay" id="inspector-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="inspector-table-title">Table Inspector</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body" id="inspector-table-body">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer" id="inspector-table-footer">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Customer History -->
+  <div class="modal-overlay" id="history-modal">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="history-modal-title">Customer History</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body" id="history-modal-body">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary modal-close-btn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6: Waitlist Add -->
+  <div class="modal-overlay" id="waitlist-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Walk-In to Waitlist</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <form id="waitlist-form">
+        <div class="modal-body">
+          <div class="form-grid grid-1">
+            <div class="form-group">
+              <label for="waitlist-form-name">Guest Name *</label>
+              <input type="text" id="waitlist-form-name" placeholder="e.g. Siddharth Roy" required>
+            </div>
+            <div class="form-group">
+              <label for="waitlist-form-phone">Contact Number (+91) *</label>
+              <input type="tel" id="waitlist-form-phone" placeholder="e.g. +91 98200 66778" required>
+            </div>
+            <div class="form-group">
+              <label for="waitlist-form-guests">Party Size *</label>
+              <input type="number" id="waitlist-form-guests" min="1" max="20" value="2" required>
+            </div>
+            <div class="form-group">
+              <label for="waitlist-form-wait">Estimated Wait Time</label>
+              <input type="text" id="waitlist-form-wait" value="20 mins">
+            </div>
+            <div class="form-group">
+              <label for="waitlist-form-section">Preferred Section</label>
+              <select id="waitlist-form-section" class="select-custom">
+                <option value="Any Section">Any Section</option>
+                <option value="Main Dining">Main Dining</option>
+                <option value="Outdoor Patio">Outdoor Patio</option>
+                <option value="VIP Lounge">VIP Lounge</option>
+                <option value="Rooftop Terrace">Rooftop Terrace</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="waitlist-form-notes">Special Requests / Notes</label>
+              <input type="text" id="waitlist-form-notes" placeholder="e.g. Waiting in lounge, high chair needed">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add to Queue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 7: Quick Seat Modal -->
+  <div class="modal-overlay" id="quickseat-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Seat Waiting Party</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body" id="quickseat-modal-body">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline modal-cancel-btn">Cancel</button>
+        <button class="btn btn-success" id="quickseat-confirm-btn">Confirm Seating</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 8: Confirmation Slip Preview -->
+  <div class="modal-overlay" id="confirmation-modal">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Automated Digital Confirmation Slip</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body" id="confirmation-preview-body">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="window.print()">🖨️ Print Slip</button>
+        <button class="btn btn-primary modal-close-btn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Link to modular vanilla JavaScript file -->
+  <script src="script.js"></script>
+</body>
+</html>
